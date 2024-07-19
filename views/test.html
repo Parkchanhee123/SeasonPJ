@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospitals</title>
+</head>
+<body>
+  <h1>병원 목록</h1>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>주소</th>
+        <th>X 좌표</th>
+        <th>Y 좌표</th>
+        <th>읍면동</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for hospital in hospitals %}
+      <tr>
+        <td>{{ hospital.addr }}</td>
+        <td>{{ hospital.XPos }}</td>
+        <td>{{ hospital.YPos }}</td>
+        <td>{{ hospital.emdongNm }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
