@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const nunjucks = require('nunjucks');
-const bodyParser = require('body-parser'); // body parser 추가 1
+const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
 
@@ -20,22 +20,50 @@ nunjucks.configure('views', {
 });
 
 app.set('view engine', 'html');
-app.use(bodyParser.urlencoded({ extended: false })); // 객체 들어감. 추가 2
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
 // 메인 페이지 라우트
 app.get('/', (req, res) => {
-  // SQL 쿼리 실행
-  const query = "SELECT addr, XPos, YPos, emdongNm FROM hospitals WHERE clCdNm = '병원'";
-  
-  connection.query(query, (err, results) => {
-    if (err) {
-      console.error('쿼리 실행 실패:', err.stack);
-      res.status(500).send('쿼리 실행 실패');
+  res.render('index', { center: null });
+});
+
+// 지도 페이지 라우트
+app.get('/map', (req, res) => {
+  res.render('index', { center: 'map' });
+});
+
+// 회원가입 페이지 라우트
+app.get('/register', (req, res) => {
+  res.render('index', { center: 'register' });
+});
+
+// 로그인 페이지 라우트
+app.get('/login', (req, res) => {
+  res.render('index', { center: 'login' });
+});
+
+app.get('/detail', (req, res) => {
+  res.render('index', { center: 'detail' });
+});
+
+app.get('/search', (req, res) => {
+  res.render('index', { center: 'search' });
+});
+
+app.get('/review', (req, res) => {
+  res.render('index', { center: 'review' });
+});
+
+// 병원 데이터 가져오는 API 라우트
+app.get('/api/hospitals', (req, res) => {
+  connection.query('SELECT yadmNm, XPos, YPos FROM hospitals', (error, results) => {
+    if (error) {
+      console.error('데이터베이스 조회 오류:', error);
+      res.status(500).send('서버 오류');
       return;
     }
-    // Nunjucks 템플릿에 데이터 전달 및 렌더링
-    res.render('test', { hospitals: results });
+    res.json(results);
   });
 });
 
@@ -44,7 +72,7 @@ app.listen(port, () => {
   console.log(`server start port:${port}`);
 });
 
-// MySQL 데이터베이스 연결
+// MySQL 데이터베이스 연결 테스트
 connection.connect((err) => {
   if (err) {
     console.error('데이터베이스 연결 실패:', err.stack);
