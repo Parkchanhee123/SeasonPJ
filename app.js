@@ -46,32 +46,41 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
   res.render('index', { center: 'login' });
 });
-
-// 병원 검색 결과 페이지 라우트
+    
+// 지역별 검색 기능 추가
 app.get('/search', (req, res) => {
   const searchTerm = req.query.q;
-  if (!searchTerm) {
-    return res.render('index', { center: 'search', hospitals: [] });
+  const region = req.query.region;
+
+  let query = 'SELECT * FROM hospitals WHERE 1=1';
+  let params = [];
+
+  if (searchTerm) {
+      query += ' AND yadmNm LIKE ?';
+      params.push(`%${searchTerm}%`);
   }
 
-  const query = 'SELECT * FROM hospitals WHERE yadmNm LIKE ?';
-  connection.query(query, [`%${searchTerm}%`], (error, results) => {
-    if (error) {
-      console.error('데이터베이스 조회 오류:', error);
-      return res.status(500).send('서버 오류');
-    }
-    res.render('index', { center: 'search', hospitals: results });
+  if (region) {
+      query += ' AND sidoCdNm = ?';
+      params.push(region);
+  }
+
+  connection.query(query, params, (error, results) => {
+      if (error) {
+          console.error('데이터베이스 조회 오류:', error);
+          res.status(500).send('서버 오류');
+          return;
+      }
+      res.render('index', { center: 'search', hospitals: results });
   });
 });
 
-app.get('/search', (req, res) => {
-  res.render('index', { center: 'search' });
-});
-
+   
+   
 app.get('/review', (req, res) => {
   res.render('index', { center: 'review' });
 });
-
+    
 // 병원 데이터 가져오는 API 라우트
 app.get('/api/hospitals', (req, res) => {
   connection.query('SELECT * FROM hospitals', (error, results) => {
@@ -81,7 +90,7 @@ app.get('/api/hospitals', (req, res) => {
       return;
     }
     res.json(results);
-  });
+  }); 
 });
 
 // 병원 상세 정보 페이지 라우트
@@ -103,6 +112,9 @@ app.get('/detail/:id', (req, res) => {
   });
 });
 
+// 라우터
+
+
 
 // 서버 시작
 app.listen(port, () => {
@@ -116,4 +128,5 @@ connection.connect((err) => {
     return;
   }
   console.log('데이터베이스 연결 성공');
-});
+});   
+   
