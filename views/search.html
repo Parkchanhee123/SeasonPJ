@@ -33,22 +33,18 @@
                             <li><a class="dropdown-item" href="/search?region=대구">대구</a></li>
                             <li><a class="dropdown-item" href="/search?region=대전">대전</a></li>
                             <li><a class="dropdown-item" href="/search?region=부산">부산</a></li>
+                            <li><a class="dropdown-item" href="/search?region=충남">충남</a></li>
+                            <li><a class="dropdown-item" href="/search?region=충북">충북</a></li>
+                            <li><a class="dropdown-item" href="/search?region=전남">전남</a></li>
+                            <li><a class="dropdown-item" href="/search?region=전북">전북</a></li>
 
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Category 2
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+
+
                         </ul>
                     </li>
                     <li class="nav-item">
                         <form class="d-flex" action="/search" method="get">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{ searchTerm }}">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </li>
@@ -56,5 +52,40 @@
             </div>
         </div>
     </nav>
+
+    <div class="container mt-4">
+        <h4>검색 결과</h4>
+        <ul class="list-group">
+            {% for hospital in hospitals %}
+            <li class="list-group-item">
+                <a href="/detail/{{ hospital.id }}">{{ hospital.yadmNm }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    
+        <!-- 페이징처리 -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center mt-4">
+                {% if currentPage > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="/search?q={{ searchTerm }}&region={{ region }}&page={{ currentPage - 1 }}">Previous</a>
+                </li>
+                {% endif %}
+    
+                {% for page in range(1, totalPages + 1) %}
+                <li class="page-item {% if page == currentPage %}active{% endif %}">
+                    <a class="page-link" href="/search?q={{ searchTerm }}&region={{ region }}&page={{ page }}">{{ page }}</a>
+                </li>
+                {% endfor %}
+    
+                {% if currentPage < totalPages %}
+                <li class="page-item">
+                    <a class="page-link" href="/search?q={{ searchTerm }}&region={{ region }}&page={{ currentPage + 1 }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    
 </body>
 </html>

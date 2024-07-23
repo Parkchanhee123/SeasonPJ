@@ -51,36 +51,67 @@ app.get('/login', (req, res) => {
 app.get('/search', (req, res) => {
   const searchTerm = req.query.q;
   const region = req.query.region;
+  const page = parseInt(req.query.page) || 1;
+  const itemsPerPage = 25; // 한 페이지에 출력하는 데이터의 개수
+  const offset = (page - 1) * itemsPerPage;
 
-  let query = 'SELECT * FROM hospitals WHERE 1=1';
+  let countQuery = 'SELECT COUNT(*) AS count FROM hospitals WHERE 1=1';
+  let dataQuery = 'SELECT * FROM hospitals WHERE 1=1';
   let params = [];
 
   if (searchTerm) {
-      query += ' AND yadmNm LIKE ?';
+      countQuery += ' AND yadmNm LIKE ?';
+      dataQuery += ' AND yadmNm LIKE ?';
       params.push(`%${searchTerm}%`);
   }
 
   if (region) {
-      query += ' AND sidoCdNm = ?';
+      countQuery += ' AND sidoCdNm = ?';
+      dataQuery += ' AND sidoCdNm = ?';
       params.push(region);
   }
 
-  connection.query(query, params, (error, results) => {
-      if (error) {
-          console.error('데이터베이스 조회 오류:', error);
+  connection.query(countQuery, params, (countError, countResults) => {
+      if (countError) {
+          console.error('데이터베이스 조회 오류:', countError);
           res.status(500).send('서버 오류');
           return;
       }
-      res.render('index', { center: 'search', hospitals: results });
+
+      const totalItems = countResults[0].count;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+      // 요청한 페이지가 유효한지 확인
+      if (page > totalPages && totalItems > 0) {
+          res.redirect(`/search?${searchTerm ? `q=${searchTerm}&` : ''}${region ? `region=${region}&` : ''}page=${totalPages}`);
+          return;
+      }
+
+      dataQuery += ' LIMIT ? OFFSET ?';
+      params.push(itemsPerPage, offset);
+
+      connection.query(dataQuery, params, (dataError, results) => {
+          if (dataError) {
+              console.error('데이터베이스 조회 오류:', dataError);
+              res.status(500).send('서버 오류');
+              return;
+          }
+          res.render('index', {
+              center: 'search',
+              hospitals: results,
+              currentPage: page,
+              totalPages: totalPages,
+              searchTerm: searchTerm || '',
+              region: region || ''
+          });
+      });
   });
 });
 
-   
-   
 app.get('/review', (req, res) => {
   res.render('index', { center: 'review' });
 });
-    
+
 // 병원 데이터 가져오는 API 라우트
 app.get('/api/hospitals', (req, res) => {
   connection.query('SELECT * FROM hospitals', (error, results) => {
@@ -112,10 +143,6 @@ app.get('/detail/:id', (req, res) => {
   });
 });
 
-// 라우터
-
-
-
 // 서버 시작
 app.listen(port, () => {
   console.log(`server start port:${port}`);
@@ -128,5 +155,4 @@ connection.connect((err) => {
     return;
   }
   console.log('데이터베이스 연결 성공');
-});   
-   
+});  
