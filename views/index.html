@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -9,8 +10,6 @@
     <title>Creative - Start Bootstrap Theme</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Bootstrap Icons-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic"
@@ -22,6 +21,11 @@
     <!-- 카카오 지도 api를 받아오는 스크립트 -->
     <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5fab85cf9de2ed2a429d4f043aa2e5c7"></script>
+    <!------ 검색 페이지 스크립트 ---------->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <style>
         .fakeimg {
             height: 200px;
@@ -33,18 +37,20 @@
 
 <body id="page-top">
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 navbar-shrink" id="mainNav">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" href="/">Start Bootstrap</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <ul class="navbar-nav ms-auto my-2 my-lg-0" style="margin-left: auto;">
                     <li class="nav-item"><a class="nav-link" href="/map">전국 병원 지도</a></li>
                     <li class="nav-item"><a class="nav-link" href="/search">병원 검색</a></li>
                     <li class="nav-item"><a class="nav-link" href="/review">병원 후기</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">ㅇㅁㄴㄹ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">로그인</a></li>
+
                 </ul>
             </div>
         </div>
@@ -67,7 +73,7 @@
 
 
 
-   
+
     <!-- Footer-->
     <footer class="bg-light py-5">
         <div class="container px-4 px-lg-5">

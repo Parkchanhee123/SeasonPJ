@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    th {
+        color: white;
+    }
+    td {
+        color: white;
+    }
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <title>병원 정보</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container" style="margin-top:30px">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>{{ hospital.yadmNm }}</h1>
+                <table class="table" style="margin-top: 20px;">
+                    <tbody>
+                        <tr>
+                            <th scope="row">주소</th>
+                            <td>{{ hospital.addr }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">전화번호</th>
+                            <td>{{ hospital.telno }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">설립일</th>
+                            <td>{{ hospital.estbDd }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">병원 URL</th>
+                            <td><a href="{{ hospital.hospUrl }}" target="_blank">{{ hospital.hospUrl }}</a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">의사 총 수</th>
+                            <td>{{ hospital.drTotCnt }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">진료 과목별 전문의 수</th>
+                            <td>{{ hospital.mdeptGdrCnt }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">진료 과목별 인턴 수</th>
+                            <td>{{ hospital.mdeptIntnCnt }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">진료 과목별 레지던트 수</th>
+                            <td>{{ hospital.mdeptResdntCnt }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">진료 과목별 전문의 수</th>
+                            <td>{{ hospital.mdeptSdrCnt }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">간호사 수</th>
+                            <td>{{ hospital.pnursCnt }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">우편번호</th>
+                            <td>{{ hospital.postNo }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">시군구 이름</th>
+                            <td>{{ hospital.sgguCdNm }}</td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">위치</th>
+                            <td>{{ hospital.sidoCdNm }}</td>
+                        </tr>
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
