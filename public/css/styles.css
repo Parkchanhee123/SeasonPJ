@@ -170,7 +170,6 @@
 header.masthead {
   padding-top: 10rem;
   padding-bottom: calc(10rem - 4.5rem);
-  /*배경사진 이부분에 추가*/
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
