@@ -88,6 +88,14 @@ passport.use(
   )
 );
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+      return next();
+  } else {
+      res.status(401).json({ message: '로그인한 사용자만 사용할 수 있습니다.' });
+  }
+}
+
 // 로그인 요청 처리
 app.post(
   "/login",
@@ -116,21 +124,29 @@ app.get('/register', (req, res) => {
   logined.go(req, res, { center: 'register' });
 });
 
-// 회원가입 페이지 라우트
-app.post('/search', (req, res) => {
-  const name = '%' + req.body.name + '%'; // 와일드카드 사용
 
-  const conn = db_connect.getConnection();
+// 병원 예약 페이지 라우트
+app.get('/book', ensureAuthenticated, (req, res) => {
+  let name = '%' + req.query.name + '%'; // 와일드카드 사용
+
+  conn = db_connect.getConnection();
   conn.query(db_sql.hospital_select_name, [name], (err, results) => {
-      if (err) {
-          console.error('Select Error:', err);
-          res.status(500).send('Database query error');
-      } else {
-          res.json(results);
+      try {
+          if (err) {                                // 에러시 결과 날아옴 (예: DB가 죽어있을 때)
+              console.log('Select Error');
+              throw err;
+          } else {
+              console.log(results);
+              logined.go(req, res, { center: 'book', hospitals: results });
+          }
+      } catch (err) {
+          console.log(err);
+      } finally {
+          db_connect.close(conn);
       }
-      db_connect.close(conn);
   });
 });
+
 
 
 
@@ -259,7 +275,7 @@ app.get('/search', (req, res) => {
   });
 });
 
-app.get('/review', (req, res) => {
+app.get('/review', ensureAuthenticated, (req, res) => {
   logined.go(req, res, { center: 'review' });
 });
 

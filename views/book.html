@@ -260,11 +260,9 @@
     </a>
     <div id="search">
         <h2>Search Hospitals</h2>
-
-
-        <form id="searchForm">
+        <form id="searchForm" action="/book" method="GET" style="text-align: center;">
             <div class="Sdiv">
-                <input class="Sinput" type="text" id="hospitalName" required>
+                <input class="Sinput" type="text" id="hospitalName" name="name" required>
                 <label class="Slabel">병원 이름</label>
                 <span class="Sspan"></span>
             </div>
