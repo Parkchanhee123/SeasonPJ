@@ -116,6 +116,24 @@ app.get('/register', (req, res) => {
   logined.go(req, res, { center: 'register' });
 });
 
+// 회원가입 페이지 라우트
+app.post('/search', (req, res) => {
+  const name = '%' + req.body.name + '%'; // 와일드카드 사용
+
+  const conn = db_connect.getConnection();
+  conn.query(db_sql.hospital_select_name, [name], (err, results) => {
+      if (err) {
+          console.error('Select Error:', err);
+          res.status(500).send('Database query error');
+      } else {
+          res.json(results);
+      }
+      db_connect.close(conn);
+  });
+});
+
+
+
 // 페이지 방문 시 호출되는 함수
 passport.deserializeUser(function (user, done) {
   console.log('Login User', user.name, user.id);
@@ -160,12 +178,12 @@ app.use(express.static('public'));
 
 // 메인 페이지 라우트
 app.get('/', (req, res) => {
-  logined.go(req, res, { center: null });
+  logined.go(req, res, undefined);
 });
 
 // 지도 페이지 라우트
 app.get('/map', (req, res) => {
-  logined.go(req, res, { center: 'map' });
+    logined.go(req, res, { center: 'map' });
 });
 
 // 회원가입 페이지 라우트

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -26,10 +25,11 @@
         }
 
         .project-info-box {
-            margin: 15px 0;
+            margin: 15px auto; /* Center align the box */
             background-color: #fff;
             padding: 30px 40px;
             border-radius: 5px;
+            text-align: center; /* Center align text */
         }
 
         .project-info-box p {
@@ -44,152 +44,10 @@
             border-bottom: none;
         }
 
-        .btn-xs.btn-icon span,
-        .btn-xs.btn-icon i {
-            line-height: 34px;
-        }
-
-        .btn-icon.btn-circle span,
-        .btn-icon.btn-circle i {
-            margin-top: -1px;
-            margin-right: -1px;
-        }
-
-        .btn-circle {
-            border-radius: 50% !important;
-        }
-
-        .project-info-box p {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #d5dadb;
-        }
-
-        p {
-            font-family: "Barlow", sans-serif !important;
-            font-weight: 300;
-            font-size: 1rem;
-            color: #686c6d;
-            letter-spacing: 0.03rem;
-            margin-bottom: 10px;
-        }
-
         .container-fluid {
             margin-top: 20px;
-            /* 줄어든 margin-top 값 */
         }
 
-        .project-info-box.mt-0 {
-            margin-top: 0 !important;
-            /* 추가한 코드 */
-        }
-
-        /* 네비게이션 바 스타일 추가 */
-        #mainNav {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            background-color: #fff;
-            transition: background-color 0.2s ease;
-        }
-
-        #mainNav .navbar-brand {
-            font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-weight: 700;
-            color: black;
-        }
-
-        #mainNav .navbar-nav .nav-item .nav-link {
-            color: #6c757d;
-            font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-weight: 700;
-            font-size: 0.9rem;
-            padding: 0.75rem 0;
-        }
-
-        #mainNav .navbar-nav .nav-item .nav-link:hover,
-        #mainNav .navbar-nav .nav-item .nav-link:active {
-            color: #f4623a;
-        }
-
-        #mainNav .navbar-nav .nav-item .nav-link.active {
-            color: #f4623a !important;
-        }
-
-        @media (min-width: 992px) {
-            #mainNav {
-                box-shadow: none;
-                background-color: transparent;
-                color: black;
-            }
-
-            #mainNav .navbar-brand {
-                color: black;
-            }
-
-            #mainNav .navbar-brand:hover {
-                color: yellow;
-            }
-
-            #mainNav .navbar-nav .nav-item .nav-link {
-                color: black !important;
-                padding: 0 1rem;
-            }
-
-            #mainNav .navbar-nav .nav-item .nav-link:hover {
-                color: #fff;
-            }
-
-            #mainNav .navbar-nav .nav-item:last-child .nav-link {
-                padding-right: 0;
-            }
-
-            #mainNav.navbar-shrink {
-                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-                background-color: #fff;
-                color: black;
-            }
-
-            #mainNav.navbar-shrink .navbar-brand {
-                color: #212529;
-            }
-
-            #mainNav.navbar-shrink .navbar-brand:hover {
-                color: #f4623a;
-            }
-
-            #mainNav.navbar-shrink .navbar-nav .nav-item .nav-link {
-                color: #212529;
-            }
-
-            #mainNav.navbar-shrink .navbar-nav .nav-item .nav-link:hover {
-                color: #f4623a;
-            }
-        }
-    </style>
-
-    <!-- 스크립트 -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-                mapOption = {
-                    center: new kakao.maps.LatLng("{{ hospital.YPos }}", "{{ hospital.XPos }}"), // 지도의 중심좌표
-                    level: 5 // 지도의 확대 레벨
-                };
-
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-
-            // 마커가 표시될 위치입니다 
-            var markerPosition = new kakao.maps.LatLng("{{ hospital.YPos }}", "{{ hospital.XPos }}");
-
-            // 마커를 생성합니다
-            var marker = new kakao.maps.Marker({
-                position: markerPosition
-            });
-
-            // 마커가 지도 위에 표시되도록 설정합니다
-            marker.setMap(map);
-        });
-    </script>
-    <style>
         table {
             border: 1px #a39485 solid;
             font-size: .9em;
@@ -197,153 +55,159 @@
             border-collapse: collapse;
             border-radius: 5px;
             overflow: hidden;
+            margin: 0 auto; 
+            text-align: center; 
+        }
+
+        th, td {
+            padding: 1em .5em;
+            vertical-align: middle;
+            text-align: left;
+        }
+
+        th {
+            background: #73685d;
+            color: #fff;
+        }
+
+        td {
+            border-bottom: 1px solid rgba(0, 0, 0, .1);
+            background: #fff;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        @media all and (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
 
             th {
-                text-align: left;
+                text-align: right;
+            }
+
+            table {
+                position: relative;
+                padding-bottom: 0;
+                border: none;
+                box-shadow: 0 0 10px rgba(0, 0, 0, .2);
             }
 
             thead {
-                font-weight: bold;
-                color: #fff;
-                background: #73685d;
+                float: left;
+                white-space: nowrap;
             }
 
-            td,
+            tbody {
+                overflow-x: auto;
+                overflow-y: hidden;
+                position: relative;
+                white-space: nowrap;
+            }
+
+            tr {
+                display: inline-block;
+                vertical-align: top;
+            }
+
             th {
-                padding: 1em .5em;
-                vertical-align: middle;
+                border-bottom: 1px solid #a39485;
             }
 
             td {
-                border-bottom: 1px solid rgba(0, 0, 0, .1);
-                background: #fff;
-            }
-
-            a {
-                color: #73685d;
-            }
-
-            @media all and (max-width: 768px) {
-
-                table,
-                thead,
-                tbody,
-                th,
-                td,
-                tr {
-                    display: block;
-                }
-
-                th {
-                    text-align: right;
-                }
-
-                table {
-                    position: relative;
-                    padding-bottom: 0;
-                    border: none;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
-                }
-
-                thead {
-                    float: left;
-                    white-space: nowrap;
-                }
-
-                tbody {
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    position: relative;
-                    white-space: nowrap;
-                }
-
-                tr {
-                    display: inline-block;
-                    vertical-align: top;
-                }
-
-                th {
-                    border-bottom: 1px solid #a39485;
-                }
-
-                td {
-                    border-bottom: 1px solid #e5e5e5;
-                }
-
-
+                border-bottom: 1px solid #e5e5e5;
             }
         }
-        
     </style>
+
+    <!-- 스크립트 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var mapContainer = document.getElementById('map'),
+                mapOption = {
+                    center: new kakao.maps.LatLng("{{ hospital.YPos }}", "{{ hospital.XPos }}"),
+                    level: 5
+                };
+
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            var markerPosition = new kakao.maps.LatLng("{{ hospital.YPos }}", "{{ hospital.XPos }}");
+
+            var marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+
+            marker.setMap(map);
+        });
+    </script>
 </head>
 
-<!-- Page Content-->
-<div class="container-fluid">
-    <div class="row">
-        <!-- 병원 정보 테이블 -->
-        <div class="col-12" style="margin-top: 30px;">
-            <div class="project-info-box mt-0">
-                <h1 style="font-family: Merriweather Sans;">{{ hospital.yadmNm }}</h1>
-                <table class="mytable" style="margin-top: 20px;">
-                    <tbody>
-                        <tr>
-                            <th scope="row">주소</th>
-                            <td>{{ hospital.addr }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">전화번호</th>
-                            <td>{{ hospital.telno }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">설립일</th>
-                            <td>{{ hospital.estbDd }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">병원 URL</th>
-                            <td><a href="{{ hospital.hospUrl }}" target="_blank">{{ hospital.hospUrl }}</a></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">의사 총 수</th>
-                            <td>{{ hospital.drTotCnt }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">전문의 수</th>
-                            <td>{{ hospital.mdeptGdrCnt + hospital.mdeptSdrCnt }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">인턴 수</th>
-                            <td>{{ hospital.mdeptIntnCnt }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">레지던트 수</th>
-                            <td>{{ hospital.mdeptResdntCnt }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">간호사 수</th>
-                            <td>{{ hospital.pnursCnt }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">우편번호</th>
-                            <td>{{ hospital.postNo }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">위치</th>
-                            <td>{{ hospital.sgguCdNm }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div><!-- / project-info-box -->
+<body>
+    <!-- Page Content-->
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="project-info-box mt-0">
+                    <h1 style="font-family: Merriweather Sans;">{{ hospital.yadmNm }}</h1>
+                    <table class="mytable" style="margin-top: 20px;">
+                        <tbody>
+                            <tr>
+                                <th scope="row">주소</th>
+                                <td>{{ hospital.addr }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">전화번호</th>
+                                <td>{{ hospital.telno }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">설립일</th>
+                                <td>{{ hospital.estbDd }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">병원 URL</th>
+                                <td><a href="{{ hospital.hospUrl }}" target="_blank">{{ hospital.hospUrl }}</a></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">의사 총 수</th>
+                                <td>{{ hospital.drTotCnt }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">전문의 수</th>
+                                <td>{{ hospital.mdeptGdrCnt + hospital.mdeptSdrCnt }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">인턴 수</th>
+                                <td>{{ hospital.mdeptIntnCnt }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">레지던트 수</th>
+                                <td>{{ hospital.mdeptResdntCnt }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">간호사 수</th>
+                                <td>{{ hospital.pnursCnt }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">우편번호</th>
+                                <td>{{ hospital.postNo }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">위치</th>
+                                <td>{{ hospital.sgguCdNm }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div><!-- / project-info-box -->
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="project-info-box">
+                    <div id="map" style="width:100%;height:350px;"></div>
+                </div><!-- / project-info-box -->
+            </div>
         </div>
     </div>
-    <div class="row">
-        <!-- 지도 -->
-        <div class="col-12">
-            <div class="project-info-box">
-                <div id="map" style="width:100%;height:350px;"></div>
-            </div><!-- / project-info-box -->
-        </div><!-- / column -->
-    </div>
-</div>
 </body>
 
 </html>

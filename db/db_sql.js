@@ -6,6 +6,8 @@ module.exports = {
     hospital_delete: 'DELETE FROM hospitals WHERE id = ?',
     hospital_select: 'SELECT * FROM hospitals',
     hospital_select_sgguCdNm : 'SELECT * FROM hospitals WHERE sidoCdNm = ?',
+    hospital_select_name : 'SELECT * FROM hospitals WHERE yadmNm LIKE ?',
+
 
     cust_select:'SELECT * FROM users',
     cust_select_one:'SELECT * FROM users WHERE id = ?',         

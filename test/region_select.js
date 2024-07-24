@@ -22,8 +22,5 @@ conn.query(db_sql.hospital_select_sgguCdNm, [sido], (err, result, fields) => {
         console.log(err);
     }finally {
         db_connect.close(conn);
-
     }
-   
-    // 연결 종료
 });
