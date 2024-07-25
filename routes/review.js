@@ -21,7 +21,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/", (req, res) => { 
+router.get("/post", (req, res) => { 
     let id = req.body.id;
     const conn = db_connect.getConnection();
     conn.query(db_sql.reviews_select_one, function (err, result, fields) {
@@ -38,5 +38,6 @@ router.get("/", (req, res) => {
         }
     });
 });
+
 
 module.exports = router;

@@ -149,6 +149,30 @@ app.get('/book', ensureAuthenticated, (req, res) => {
   });
 });
 
+// 예약 요청을 처리하는 엔드포인트
+app.post('/reserve', (req, res) => {
+  const { hospital, slot } = req.body;
+
+  if (!hospital || !slot) {
+      return res.status(400).send({ success: false, message: 'Missing hospital or slot information.' });
+  }
+
+  const conn = db_connect.getConnection();
+  const query = 'INSERT INTO reservation (hospital_name, reservation_time) VALUES (?, ?)';
+
+  conn.query(query, [hospital, slot], (err, result) => {
+      if (err) {
+          console.error('Database insertion error:', err);
+          return res.status(500).send({ success: false, message: 'Database error' });
+      }
+
+      console.log('Reservation saved:', result);
+      res.send({ success: true, message: 'Reservation successful' });
+      db_connect.close(conn);
+  });
+});
+
+
 // 페이지 방문 시 호출되는 함수
 passport.deserializeUser(function (user, done) {
   console.log('Login User', user.name, user.id);
