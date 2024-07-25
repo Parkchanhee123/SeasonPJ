@@ -21,18 +21,30 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/post", (req, res) => { 
-    let id = req.body.id;
-    const conn = db_connect.getConnection();
-    conn.query(db_sql.reviews_select_one, function (err, result, fields) {
+// 리뷰작성 페이지
+router.get('/post', (req, res) => {
+    logined.go(req, res, { center: 'review/post' });
+});
+
+router.post("/addimpl", (req, res) => {
+    let hos = req.body.hos;
+    let userid = req.body.userid;
+    let comm = req.body.comm;
+    let values = [null, userid, hos, comm]; 
+
+    conn = db_connect.getConnection();
+
+    conn.query(db_sql.review_insert, values, (e, result, fields) => {
         try {
-            if (err) {
-                console.log('Select Error:', err);
-                throw err;
+            if (e) {
+                console.log('Insert Error:', e);
+                throw e;
+            } else {
+                console.log('Insert OK !');
+                res.redirect('/review');
             }
-            logined.go(req, res, { center: 'review/post', datas: result }); // 템플릿에 데이터 전달
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            console.log(error);
         } finally {
             db_connect.close(conn);
         }

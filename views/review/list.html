@@ -3,9 +3,9 @@
         <div class="col-sm-12">
             <div class="d-flex justify-content-between align-items-center">
             <h2> 병원 후기 </h2>
-            <a href="/post">
-                <button type="button" class="btn btn-primary">글쓰기</button>
-            </a>
+            <a href="/review/post">
+              <button type="button" class="btn btn-primary">글쓰기</button>
+          </a>
             </div>
             <table class="table">
                 <thead class="thead-dark">
@@ -13,7 +13,6 @@
                     <th></th>
                     <th>병원 이름</th>
                     <th>작성자</th>
-                    <th>평점</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -21,9 +20,8 @@
                     <tr>        
                       <td> <a href="/cust/detail?id={{data.review_id}}">{{data.review_id}}</a></td>
                              <!-- 왼쪽은 서버에 요청하는 명령 ?부터는 data값 -->
-                      <td>{{data.hospital_id}}</td>
+                      <td>{{data.hospital_name}}</td>
                       <td>{{data.user_id}}</td>
-                      <td>{{data.rating}}</td>
                     </tr>
                   {% endfor %}
                 </tbody>

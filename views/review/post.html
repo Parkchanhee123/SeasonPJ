@@ -1,0 +1,24 @@
+<div class="text_container" style="margin-top:30px; width:50%; margin:0 auto;">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>병원 후기 남기기</h2>
+            <form action="/review/addimpl" method="post">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1" style="margin-top: 50px;">닉네임</label>
+                    <input type="text" class="form-control" id="userid" name="userid">
+                </div>
+    
+                <div class="form-group">
+                    <label for="exampleFormControlInput1" style="margin-top: 50px;">병원 이름</label>
+                    <input type="text" class="form-control" id="hos" name="hos"> <!-- name="hos"로 변경 -->
+                </div>
+    
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">후기</label>
+                    <textarea class="form-control" id="comm" name="comm" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-bottom: 10px;">확인</button>
+            </form>
+        </div>
+    </div>
+</div>

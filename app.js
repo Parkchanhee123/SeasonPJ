@@ -149,6 +149,8 @@ app.get('/book', ensureAuthenticated, (req, res) => {
   });
 });
 
+
+
 // 예약 요청을 처리하는 엔드포인트
 app.post('/reserve', (req, res) => {
   const { hospital, slot } = req.body;
