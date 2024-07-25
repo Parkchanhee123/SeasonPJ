@@ -11,15 +11,16 @@
                 <thead class="thead-dark">
                   <tr>
                     <th></th>
-                    <th>병원 이름</th>
+                    <th>제목</th>
+                    <th>병원</th>
                     <th>작성자</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for data in datas %}
                     <tr>        
-                      <td> <a href="/cust/detail?id={{data.review_id}}">{{data.review_id}}</a></td>
-                             <!-- 왼쪽은 서버에 요청하는 명령 ?부터는 data값 -->
+                      <td> <a href="/review/detail?id={{data.review_id}}">{{data.review_id}}</a></td>
+                      <td>{{data.title}}</td>
                       <td>{{data.hospital_name}}</td>
                       <td>{{data.user_id}}</td>
                     </tr>

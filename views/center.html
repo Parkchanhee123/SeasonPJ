@@ -26,6 +26,7 @@
                     </button>
                 </a>
             </div>
+            {% if loginid %}
             <div class="icon_group">
                 <a href="/book" class="map_btn">
                     <button class="mybutton">
@@ -35,10 +36,27 @@
                 </a>
                 <a href="/review" class="map_btn">
                     <button class="mybutton">
-                        <p> 병원 후기 작성하기 </p>
+                        <p> 병원 후기 확인하기 </p>
                         <img src="/img/review.jpg" alt="Review Icon" class="button-icon">
                     </button>
                 </a>
+            {% else %}
+            <div class="icon_group">
+                <a href="/log_alert" class="map_btn">
+                    <button class="mybutton">
+                        <p> 병원 예약하기 </p>
+                        <img src="/img/reservation.jpg" alt="reservation Icon" class="button-icon">
+                    </button>
+                </a>
+                <a href="/log_alert" class="map_btn">
+                    <button class="mybutton">
+                        <p> 병원 후기 확인하기 </p>
+                        <img src="/img/review.jpg" alt="Review Icon" class="button-icon">
+                    </button>
+                </a>
+            {% endif %}
+
+            
             </div>
         </div>
     </div>

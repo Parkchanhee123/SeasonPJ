@@ -4,7 +4,7 @@ const db_connect = require('../db/db_connect');
 const db_sql = require('../db/db_sql');
 const logined = require('../util/logined');
 
-router.get("/", (req, res) => { 
+router.get("/", (req, res) => {
     const conn = db_connect.getConnection();
     conn.query(db_sql.reviews_select, function (err, result, fields) {
         try {
@@ -30,7 +30,8 @@ router.post("/addimpl", (req, res) => {
     let hos = req.body.hos;
     let userid = req.body.userid;
     let comm = req.body.comm;
-    let values = [null, userid, hos, comm]; 
+    let title = req.body.title;
+    let values = [null, title, userid, comm, hos];
 
     conn = db_connect.getConnection();
 
@@ -45,6 +46,27 @@ router.post("/addimpl", (req, res) => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            db_connect.close(conn);
+        }
+    });
+});
+
+router.get("/detail", (req, res) => {
+    let id = req.query.id;
+    conn = db_connect.getConnection();
+    conn.query(db_sql.review_select_one, [id], function (err, result, fields) {
+        try {
+            if (err) {
+                console.log('Select Error:', err);
+                throw err;
+            } else {
+                console.log(result);
+                custinfo = result[0];
+                logined.go(req, res, { 'center': 'review/detail', 'custinfo': custinfo });
+            }
+        } catch (err) {
+            console.log(err);
         } finally {
             db_connect.close(conn);
         }
