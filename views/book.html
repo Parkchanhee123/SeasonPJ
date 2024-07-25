@@ -250,24 +250,179 @@
         .btn-3 span:hover:after {
             width: 100%;
         }
+
+        #results {
+            width: 80%;
+            /* 너비를 줄여서 화면 양쪽에 여백을 둡니다 */
+            margin: 0 auto;
+            /* 중앙 정렬 */
+            padding: 20px;
+            /* 내부 여백 */
+            border: 1px solid #ddd;
+            /* 테두리 */
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            background-color: #f9f9f9;
+            /* 배경 색상 */
+        }
     </style>
 </head>
 
+<script>
+    $(document).ready(function () {
+        let selectedSlot = null;
+        let selectedDate = null;
+
+        // $('#searchForm').on('submit', function (event) {
+        //     console.log("폼 제출 확인용"); // 이 로그가 출력되는지 확인합니다.
+        //     event.preventDefault();
+        //     $('#reserve').show();
+        //     // $('html, body').animate({
+        //     //     scrollTop: $('#reserve').offset().top
+        //     // }, 1000);
+        // });
+
+        $('#calendar').fullCalendar({
+            selectable: true,
+            selectHelper: true,
+            select: function (start) {
+                $('#timeSlotsMorning').empty();
+                $('#timeSlotsAfternoon').empty();
+                selectedDate = start.format('YYYY-MM-DD');
+                $('#selectedDateTime').text(`선택된 날짜: ${start.format('YYYY. M. D (dd)')}`);
+                generateTimeSlots(selectedDate);
+            }
+        });
+
+        $('#reservationForm').on('submit', function (event) {
+            event.preventDefault();
+            $('#reserve').hide();
+            $('#mobileId').show();
+            $('html, body').animate({
+                scrollTop: $('#mobileId').offset().top
+            }, 1000);
+        });
+
+        $('#mobileIdForm').on('submit', function (event) {
+            event.preventDefault();
+            const userName = $('#userName').val();
+            const userAge = $('#userAge').val();
+            const userSSN = $('#userSSN').val();
+            const userDOB = $('#userDOB').val();
+
+            $.ajax({
+                url: 'http://localhost:3000/register',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ name: userName, age: userAge, ssn: userSSN, dob: userDOB }),
+                success: function (response) {
+                    if (response.success) {
+                        alert('Registration successful! Your auth code is: ' + response.authCode);
+                    }
+                }
+            });
+        });
+
+        $('#verifyForm').on('submit', function (event) {
+            event.preventDefault();
+            const verifySSN = $('#verifySSN').val();
+            const verifyAuthCode = $('#verifyAuthCode').val();
+
+            $.ajax({
+                url: 'http://localhost:3000/verify',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ ssn: verifySSN, authCode: verifyAuthCode }),
+                success: function (response) {
+                    if (response.success) {
+                        alert('Verification successful!');
+                    } else {
+                        alert('Verification failed!');
+                    }
+                }
+            });
+        });
+
+        function generateTimeSlots(date) {
+            const timeSlotsMorning = ['10:00', '10:30', '11:00', '11:30'];
+            const timeSlotsAfternoon = ['12:00', '12:30', '2:00', '2:30', '3:00', '3:30', '4:00', '4:30', '5:00', '5:30', '6:00'];
+            const reservedSlots = ['2024-07-25T10:00', '2024-07-25T14:00'];
+
+            timeSlotsMorning.forEach(time => {
+                let timeSlotId = `${date}T${time}`;
+                $('#timeSlotsMorning').append(`
+                    <div class="time-slot">
+                        <button type="button" class="btn ${reservedSlots.includes(timeSlotId) ? 'disabled' : ''}" id="${timeSlotId}" data-id="${timeSlotId}">
+                            ${time}
+                        </button>
+                    </div>
+                `);
+            });
+
+            timeSlotsAfternoon.forEach(time => {
+                let timeSlotId = `${date}T${time}`;
+                $('#timeSlotsAfternoon').append(`
+                    <div class="time-slot">
+                        <button type="button" class="btn ${reservedSlots.includes(timeSlotId) ? 'disabled' : ''}" id="${timeSlotId}" data-id="${timeSlotId}">
+                            ${time}
+                        </button>
+                    </div>
+                `);
+            });
+
+            $('.btn').on('click', function () {
+                if ($(this).hasClass('disabled')) return;
+                $('.btn').removeClass('selected');
+                $(this).addClass('selected');
+                selectedSlot = $(this).data('id');
+                $('#selectedDateTime').text(`선택된 날짜와 시간: ${selectedSlot}`);
+            });
+        }
+    });
+</script>
+
 <body>
     <h1>Welcome to Hospital Reservation</h1>
-    <a href="/search">
-        Search Hospitals
-    </a>
+
     <div id="search">
         <h2>Search Hospitals</h2>
+        <a href="/search">
+            <button class="custom-btn btn-3">
+                <span>병원 찾기</span>
+            </button>
+        </a>
+
         <form id="searchForm" action="/book" method="GET" style="text-align: center;">
             <div class="Sdiv">
                 <input class="Sinput" type="text" id="hospitalName" name="name" required>
                 <label class="Slabel">병원 이름</label>
                 <span class="Sspan"></span>
             </div>
-            <button class="custom-btn btn-3" type="submit" class="btn"><span>검색</span></button>
+            <button class="custom-btn btn-3" type="submit"><span>검색</span></button>
         </form>
+
+    </div>
+
+    <div id="results">
+        {% if hospitals.length > 0 %}
+        <table border="1">
+            <tr>
+                <th>병원 이름</th>
+                <th>주소</th>
+                <th>전화번호</th>
+            </tr>
+            {% for hospital in hospitals %}
+            <tr>
+                <td>{{ hospital.yadmNm }}</td>
+                <td>{{ hospital.addr }}</td>
+                <td>{{ hospital.telno }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>검색 결과가 없습니다.</p>
+        {% endif %}
+    </div>
     </div>
     <div id="reserve" style="display:none;">
         <h2>Reserve Hospital</h2>
@@ -304,117 +459,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            let selectedSlot = null;
-            let selectedDate = null;
 
-            $('#searchForm').on('submit', function (event) {
-                event.preventDefault();
-                $('#reserve').show();
-                $('html, body').animate({
-                    scrollTop: $('#reserve').offset().top
-                }, 1000);
-            });
-
-            $('#calendar').fullCalendar({
-                selectable: true,
-                selectHelper: true,
-                select: function (start) {
-                    $('#timeSlotsMorning').empty();
-                    $('#timeSlotsAfternoon').empty();
-                    selectedDate = start.format('YYYY-MM-DD');
-                    $('#selectedDateTime').text(`선택된 날짜: ${start.format('YYYY. M. D (dd)')}`);
-                    generateTimeSlots(selectedDate);
-                }
-            });
-
-            $('#reservationForm').on('submit', function (event) {
-                event.preventDefault();
-                $('#reserve').hide();
-                $('#mobileId').show();
-                $('html, body').animate({
-                    scrollTop: $('#mobileId').offset().top
-                }, 1000);
-            });
-
-            $('#mobileIdForm').on('submit', function (event) {
-                event.preventDefault();
-                const userName = $('#userName').val();
-                const userAge = $('#userAge').val();
-                const userSSN = $('#userSSN').val();
-                const userDOB = $('#userDOB').val();
-
-                $.ajax({
-                    url: 'http://localhost:3000/register',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ name: userName, age: userAge, ssn: userSSN, dob: userDOB }),
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Registration successful! Your auth code is: ' + response.authCode);
-                        }
-                    }
-                });
-            });
-
-            $('#verifyForm').on('submit', function (event) {
-                event.preventDefault();
-                const verifySSN = $('#verifySSN').val();
-                const verifyAuthCode = $('#verifyAuthCode').val();
-
-                $.ajax({
-                    url: 'http://localhost:3000/verify',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ ssn: verifySSN, authCode: verifyAuthCode }),
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Verification successful!');
-                        } else {
-                            alert('Verification failed!');
-                        }
-                    }
-                });
-            });
-
-            function generateTimeSlots(date) {
-                const timeSlotsMorning = ['10:00', '10:30', '11:00', '11:30'];
-                const timeSlotsAfternoon = ['12:00', '12:30', '2:00', '2:30', '3:00', '3:30', '4:00', '4:30', '5:00', '5:30', '6:00'];
-                const reservedSlots = ['2024-07-25T10:00', '2024-07-25T14:00'];
-
-                timeSlotsMorning.forEach(time => {
-                    let timeSlotId = `${date}T${time}`;
-                    $('#timeSlotsMorning').append(`
-                        <div class="time-slot">
-                            <button type="button" class="btn ${reservedSlots.includes(timeSlotId) ? 'disabled' : ''}" id="${timeSlotId}" data-id="${timeSlotId}">
-                                ${time}
-                            </button>
-                        </div>
-                    `);
-                });
-
-                timeSlotsAfternoon.forEach(time => {
-                    let timeSlotId = `${date}T${time}`;
-                    $('#timeSlotsAfternoon').append(`
-                        <div class="time-slot">
-                            <button type="button" class="btn ${reservedSlots.includes(timeSlotId) ? 'disabled' : ''}" id="${timeSlotId}" data-id="${timeSlotId}">
-                                ${time}
-                            </button>
-                        </div>
-                    `);
-                });
-
-                $('.btn').on('click', function () {
-                    if ($(this).hasClass('disabled')) return;
-                    $('.btn').removeClass('selected');
-                    $(this).addClass('selected');
-                    selectedSlot = $(this).data('id');
-                    $('#selectedDateTime').text(`선택된 날짜와 시간: ${selectedSlot}`);
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>

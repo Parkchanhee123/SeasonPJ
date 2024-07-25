@@ -13,5 +13,10 @@ module.exports = {
     cust_select_one:'SELECT * FROM users WHERE id = ?',         
     cust_insert:'INSERT INTO users (id,pwd,name, acc) VALUES (?,?,?,?)',
     cust_update: 'UPDATE users SET pwd=?, name=?, acc=? WHERE id=?',
-    cust_delete:'DELETE FROM users WHERE id = ?'
+    cust_delete:'DELETE FROM users WHERE id = ?',
+
+    review_insert:'INSERT INTO reviews (id,pwd,name, acc) VALUES (?,?,?,?)',
+    reviews_select: 'SELECT * FROM reviews',
+    review_select_one:'SELECT * FROM reviews WHERE id = ?',         
+
 };

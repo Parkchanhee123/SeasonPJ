@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>병원 후기 페이지</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/a6f0361695.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet"> <!-- 사용자 CSS 파일 링크 -->
+    <style>
+        /* 사용자 정의 스타일 */
+        .form-control {
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            margin-top: 10px;
+        }
+        .input-group-prepend {
+            margin-right: 0;
+        }
+        .input-group-text {
+            width: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 id="fh2" class="text-center">후기 작성</h2>
+        <h6 id="fh6" class="text-center">.</h6>
+
+        <form id="feedback" onsubmit="submitReview(event)">
+            <div class="pinfo text-center">.</div>
+            <!-- 제목 입력 필드 -->
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-pencil"></i></span>
+                    </div>
+                    <input name="title" id="title" placeholder="제목" class="form-control" type="text" required>
+                </div>
+            </div>
+
+            <div class="pinfo text-center"></div>
+
+            <!-- 이름 입력 필드 -->
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-user"></i></span>
+                    </div>
+                    <input name="name" id="name" placeholder="이름" class="form-control" type="text" required>
+                </div>
+            </div>
+
+            <!-- 방문일자 입력 필드 -->
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                    </div>
+                    <input name="visit_date" id="visit_date" type="date" class="form-control" placeholder="방문일자" required>
+                </div>
+            </div>
+
+            <!-- 병원이름 입력 필드 -->
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-hospital"></i></span>
+                    </div>
+                    <input name="hospital_name" id="hospital_name" placeholder="병원이름" class="form-control" type="text" required>
+                </div>
+            </div>
+
+            <!-- 평점 선택 필드 -->
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-heart"></i></span>
+                    </div>
+                    <select class="form-control" id="rate" required>
+                        <option value="">평점</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="pinfo text-center">.</div>
+
+            <!-- 리뷰 내용 입력 필드 -->
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-pencil"></i></span>
+                    </div>
+                    <textarea class="form-control" placeholder="리뷰를 작성해주세요." id="review" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">확인</button>
+        </form>
+    </div>
+
+    <!-- 스크립트 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // AJAX로 폼 데이터를 서버로 전송하는 함수
+        function submitReview(event) {
+            event.preventDefault(); // 폼 제출 방지
+
+            const name = document.getElementById('name').value;
+            const visitDate = document.getElementById('visit_date').value;
+            const hospitalName = document.getElementById('hospital_name').value;
+            const title = document.getElementById('title').value;
+            const rate = document.getElementById('rate').value;
+            const review = document.getElementById('review').value;
+
+            // AJAX 요청
+            fetch('/review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    visitDate,
+                    hospitalName,
+                    title,
+                    rate,
+                    review
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 성공적으로 저장되면 게시글 목록 페이지로 이동
+                    window.location.href = '/posts'; // '/posts.html' 대신 '/posts'
+                } else {
+                    console.error('Failed to submit review');
+                    alert('후기 제출에 실패했습니다.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

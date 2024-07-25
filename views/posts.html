@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 목록</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet"> <!-- 사용자 CSS 파일 링크 -->
+    <style>
+        /* 사용자 정의 스타일 */
+        .post-preview {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">게시글 목록</h2>
+        <div id="post-list" class="mt-4"></div>
+    </div>
+
+    <!-- 스크립트 -->
+    <script>
+        // 페이지 로드 시 게시글 목록을 가져와서 표시하는 함수
+        function loadPosts() {
+            fetch('/api/posts')
+                .then(response => response.json())
+                .then(posts => {
+                    const postList = document.getElementById('post-list');
+                    postList.innerHTML = posts.map(post => `
+                        <div class="card mb-3">
+                            <div class="card-body post-preview" onclick="window.location.href='/post?id=${post.id}'">
+                                <h5 class="card-title">${post.title}</h5>
+                                <p class="card-text">${post.preview}</p>
+                                <p class="card-text"><small class="text-muted">작성일: ${new Date(post.created_at).toLocaleDateString()}</small></p>
+                            </div>
+                        </div>
+                    `).join('');
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // 페이지 로드 시 게시글 목록을 불러옵니다.
+        window.onload = loadPosts;
+    </script>
+</body>
+</html>

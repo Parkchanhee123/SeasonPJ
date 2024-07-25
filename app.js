@@ -14,7 +14,7 @@ const MemoryStore = require("memorystore")(session);
 
 // Passport lib
 const passport = require("passport"),
-    LocalStrategy = require("passport-local").Strategy;
+  LocalStrategy = require("passport-local").Strategy;
 
 // MySQL 데이터베이스 연결 설정
 const connection = mysql.createConnection({
@@ -36,12 +36,12 @@ nunjucks.configure('views', {
 // Session 선언
 app.use(
   session({
-      secret: "secret key",
-      resave: false,
-      saveUninitialized: true,
-      store: new MemoryStore({
-          checkPeriod: 86400000, // 24 hours
-      })
+    secret: "secret key",
+    resave: false,
+    saveUninitialized: true,
+    store: new MemoryStore({
+      checkPeriod: 86400000, // 24 hours
+    })
   })
 );
 
@@ -65,34 +65,35 @@ passport.serializeUser(function (user, done) {
 // local login 전략 설정
 passport.use(
   new LocalStrategy(
-      {
-          usernameField: "id",
-          passwordField: "pwd",
-      },
-      function (userid, password, done) {
-          console.log('Login attempt:', userid, password);
+    {
+      usernameField: "id",
+      passwordField: "pwd",
+    },
+    function (userid, password, done) {
+      console.log('Login attempt:', userid, password);
 
-          conn = db_connect.getConnection();
-          conn.query(db_sql.cust_select_one, [userid], (err, row) => {
-              if (err) return done(err);
+      const conn = db_connect.getConnection();
+      conn.query(db_sql.cust_select_one, [userid], (err, row) => {
+        if (err) return done(err);
 
-              if (row[0] === undefined) {
-                  return done(null, false, { message: "Invalid username or password." });
-              } else if (row[0]['pwd'] !== password) {
-                  return done(null, false, { message: "Invalid username or password." });
-              } else {
-                  return done(null, { id: userid, name: row[0]['name'], acc: row[0]['acc'] });
-              }
-          });
-      }
+        if (row[0] === undefined) {
+          return done(null, false, { message: "Invalid username or password." });
+        } else if (row[0]['pwd'] !== password) {
+          return done(null, false, { message: "Invalid username or password." });
+        } else {
+          return done(null, { id: userid, name: row[0]['name'], acc: row[0]['acc'] });
+        }
+      });
+    }
   )
 );
 
+// 사용자가 로그인 되어 있는지 확인하는 미들웨어
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-      return next();
+    return next();
   } else {
-      res.status(401).json({ message: '로그인한 사용자만 사용할 수 있습니다.' });
+    res.redirect('/login?message=로그인이 필요한 서비스 입니다');
   }
 }
 
@@ -100,17 +101,17 @@ function ensureAuthenticated(req, res, next) {
 app.post(
   "/login",
   passport.authenticate("local", {
-      successRedirect: "/center", // 로그인 성공 시 이동할 경로
-      failureRedirect: "/login",   // 로그인 실패 시 이동할 경로
-      failureFlash: true           // 플래시 메시지 활성화
+    successRedirect: "/center", // 로그인 성공 시 이동할 경로
+    failureRedirect: "/login",   // 로그인 실패 시 이동할 경로
+    failureFlash: true           // 플래시 메시지 활성화
   })
 );
 
 // 로그인 페이지 라우트
 app.get('/login', (req, res) => {
   logined.go(req, res, {
-      center: 'login',
-      message: req.flash('error')  // 플래시 메시지 전달
+    center: 'login',
+    message: req.flash('error')  // 플래시 메시지 전달
   });
 });
 
@@ -125,30 +126,28 @@ app.get('/register', (req, res) => {
 });
 
 
-// 병원 예약 페이지 라우트
+// 병원 예약 페이지
 app.get('/book', ensureAuthenticated, (req, res) => {
-  let name = '%' + req.query.name + '%'; // 와일드카드 사용
-
-  conn = db_connect.getConnection();
+  let name = req.query.name;
+  name = '%' + name + '%'; 
+  console.log("검색어:", name); 
+  const conn = db_connect.getConnection();
   conn.query(db_sql.hospital_select_name, [name], (err, results) => {
-      try {
-          if (err) {                                // 에러시 결과 날아옴 (예: DB가 죽어있을 때)
-              console.log('Select Error');
-              throw err;
-          } else {
-              console.log(results);
-              logined.go(req, res, { center: 'book', hospitals: results });
-          }
-      } catch (err) {
-          console.log(err);
-      } finally {
-          db_connect.close(conn);
+    try {
+      if (err) {
+        console.log('Select Error:', err);
+        throw err;
+      } else {
+        console.log("검색 결과:", results); 
+        logined.go(req, res, { center: 'book', hospitals: results, searchQuery: req.query.name });
       }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      db_connect.close(conn);
+    }
   });
 });
-
-
-
 
 // 페이지 방문 시 호출되는 함수
 passport.deserializeUser(function (user, done) {
@@ -166,25 +165,25 @@ app.post('/registerimpl', (req, res) => {
 
   // DB에 입력 후 회원가입 완료 페이지로 리다이렉트
   let values = [id, pwd, name, acc];
-  conn = db_connect.getConnection();
+  const conn = db_connect.getConnection();
 
   conn.query(db_sql.cust_insert, values, (e) => {
-      if (e) {
-          console.log('Insert Error', e);
-          throw e;
-      } else {
-          console.log('Insert OK !');
-          logined.go(req, res, { center: 'registerok', name: name });
-      }
+    if (e) {
+      console.log('Insert Error', e);
+      throw e;
+    } else {
+      console.log('Insert OK !');
+      logined.go(req, res, { center: 'registerok', name: name });
+    }
   });
 });
 
 // 로그아웃 처리
 app.get('/logout', (req, res) => {
   req.logout((err) => {
-      if (err) { return next(err); }
-      req.session.destroy();
-      res.redirect('/');
+    if (err) { return next(err); }
+    req.session.destroy();
+    res.redirect('/');
   });
 })
 
@@ -199,7 +198,7 @@ app.get('/', (req, res) => {
 
 // 지도 페이지 라우트
 app.get('/map', (req, res) => {
-    logined.go(req, res, { center: 'map' });
+  logined.go(req, res, { center: 'map' });
 });
 
 // 회원가입 페이지 라우트
@@ -212,8 +211,17 @@ app.get('/login', (req, res) => {
   logined.go(req, res, { center: 'login' });
 });
 
+// 로그인 필요한 서비스 안내
+app.get('/log_alert', (req, res) => {
+  res.send(`
+    <script>
+      alert("로그인이 필요한 서비스 입니다");
+      window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+    </script>
+  `);
+});
 
-    
+
 // 지역별 검색 기능 추가
 app.get('/search', (req, res) => {
   const searchTerm = req.query.q;
@@ -227,57 +235,54 @@ app.get('/search', (req, res) => {
   let params = [];
 
   if (searchTerm) {
-      countQuery += ' AND yadmNm LIKE ?';
-      dataQuery += ' AND yadmNm LIKE ?';
-      params.push(`%${searchTerm}%`);
+    countQuery += ' AND yadmNm LIKE ?';
+    dataQuery += ' AND yadmNm LIKE ?';
+    params.push(`%${searchTerm}%`);
   }
 
   if (region) {
-      countQuery += ' AND sidoCdNm = ?';
-      dataQuery += ' AND sidoCdNm = ?';
-      params.push(region);
+    countQuery += ' AND sidoCdNm = ?';
+    dataQuery += ' AND sidoCdNm = ?';
+    params.push(region);
   }
 
   connection.query(countQuery, params, (countError, countResults) => {
-      if (countError) {
-          console.error('데이터베이스 조회 오류:', countError);
-          res.status(500).send('서버 오류');
-          return;
+    if (countError) {
+      console.error('데이터베이스 조회 오류:', countError);
+      res.status(500).send('서버 오류');
+      return;
+    }
+
+    const totalItems = countResults[0].count;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    // 요청한 페이지가 유효한지 확인
+    if (page > totalPages && totalItems > 0) {
+      res.redirect(`/search?${searchTerm ? `q=${searchTerm}&` : ''}${region ? `region=${region}&` : ''}page=${totalPages}`);
+      return;
+    }
+
+    dataQuery += ' LIMIT ? OFFSET ?';
+    params.push(itemsPerPage, offset);
+
+    connection.query(dataQuery, params, (dataError, results) => {
+      if (dataError) {
+        console.error('데이터베이스 조회 오류:', dataError);
+        res.status(500).send('서버 오류');
+        return;
       }
-
-      const totalItems = countResults[0].count;
-      const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-      // 요청한 페이지가 유효한지 확인
-      if (page > totalPages && totalItems > 0) {
-          res.redirect(`/search?${searchTerm ? `q=${searchTerm}&` : ''}${region ? `region=${region}&` : ''}page=${totalPages}`);
-          return;
-      }
-
-      dataQuery += ' LIMIT ? OFFSET ?';
-      params.push(itemsPerPage, offset);
-
-      connection.query(dataQuery, params, (dataError, results) => {
-          if (dataError) {
-              console.error('데이터베이스 조회 오류:', dataError);
-              res.status(500).send('서버 오류');
-              return;
-          }
-          logined.go(req, res, {
-            center: 'search',
-            hospitals: results,
-            currentPage: page,
-            totalPages: totalPages,
-            searchTerm: searchTerm || '',
-            region: region || ''| ''
-          });
+      logined.go(req, res, {
+        center: 'search',
+        hospitals: results,
+        currentPage: page,
+        totalPages: totalPages,
+        searchTerm: searchTerm || '',
+        region: region || ''
       });
+    });
   });
 });
 
-app.get('/review', ensureAuthenticated, (req, res) => {
-  logined.go(req, res, { center: 'review' });
-});
 
 // 병원 데이터 가져오는 API 라우트
 app.get('/api/hospitals', (req, res) => {
@@ -292,7 +297,7 @@ app.get('/api/hospitals', (req, res) => {
     }
     db_connect.close(conn);
   });
-}); 
+});
 
 // 병원 상세 정보 페이지 라우트
 app.get('/detail/:id', (req, res) => {
@@ -313,8 +318,12 @@ app.get('/detail/:id', (req, res) => {
   });
 });
 
+//라우트
 const user = require('./routes/user');
 app.use('/user', user);
+
+const review = require('./routes/review');
+app.use('/review', review);
 
 // 마이페이지
 app.get('/user', (req, res) => {
@@ -333,4 +342,4 @@ connection.connect((err) => {
     return;
   }
   console.log('데이터베이스 연결 성공');
-});  
+});

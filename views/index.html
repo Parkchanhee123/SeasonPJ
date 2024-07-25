@@ -26,6 +26,10 @@
     <!-- jquary -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<script >
+
+</script>
+
 
 <body id="page-top">
     <!-- Navigation-->
@@ -39,14 +43,18 @@
                 <ul class="navbar-nav ms-auto my-2 my-lg-0" style="margin-left: auto;">
                     <li class="nav-item"><a class="nav-link" href="/map">전국 병원 지도</a></li>
                     <li class="nav-item"><a class="nav-link" href="/search">병원 검색</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/review">병원 후기</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/book">병원 예약</a></li>
+
 
                     {% if loginid %}
                     <i class="bi bi-person-fill"></i>
+                    <li class="nav-item"><a class="nav-link" href="/review">병원 후기</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/book">병원 예약</a></li>
                     <li class="nav-item"><a class="nav-link" href="/user/detail?id={{data.id}}">마이페이지</a></li>
                     <li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
+                    
                     {% else %}
+                    <li class="nav-item"><a class="nav-link" href="/log_alert">병원 후기</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/log_alert">병원 예약</a></li>
                     <li class="nav-item"><a class="nav-link" href="/login">로그인</a></li>
                     <li class="nav-item"><a class="nav-link" href="/register">회원가입</a></li>
                     {% endif %}
