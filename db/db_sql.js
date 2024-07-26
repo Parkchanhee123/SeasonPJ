@@ -18,6 +18,5 @@ module.exports = {
     review_insert:'INSERT INTO reviews (review_id, title ,user_id, comment, hospital_name) VALUES (?,?,?,?,?)',
     reviews_select: 'SELECT * FROM reviews',
     review_select_one: 'SELECT * FROM reviews WHERE review_id = ?',
-    
-
+    review_insert_all: 'INSERT INTO reviews (title, name, visit_date, hospital_name, rate, review) VALUES (?, ?, ?, ?, ?, ?)',
 };

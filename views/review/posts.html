@@ -1,0 +1,46 @@
+
+    <div class="container mt-5">
+        <h2 class="text-center">게시글 목록</h2>
+        <div id="post-list" class="mt-4"></div>
+        <!-- 작성 버튼 -->
+        <a href="/posts/reviews" class="btn btn-primary btn-block">작성</a>
+    </div>
+    
+    <!-- 게시글 목록을 표시할 부분 -->
+
+    <section id="posts" class="py-5">
+        <div class="container">
+            <h2>게시글 목록</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>미리보기</th>
+                        <th>작성일자</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if posts %}
+                        {% for post in posts %}
+                        <tr>
+                            <td><a href="/posts/detail?id={{ post.id }}">{{ post.title }}</a></td>
+                            <td>{{ post.name }}</td>
+                            <td>{{ post.preview }}</td>
+                            <td>{{ post.created_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4">게시글이 없습니다.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+
+    
+

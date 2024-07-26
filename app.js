@@ -150,29 +150,25 @@ app.get('/book', ensureAuthenticated, (req, res) => {
 });
 
 
-
-// 예약 요청을 처리하는 엔드포인트
+// 예약 db
 app.post('/reserve', (req, res) => {
-  const { hospital, slot } = req.body;
-
-  if (!hospital || !slot) {
-      return res.status(400).send({ success: false, message: 'Missing hospital or slot information.' });
-  }
-
-  const conn = db_connect.getConnection();
-  const query = 'INSERT INTO reservation (hospital_name, reservation_time) VALUES (?, ?)';
-
-  conn.query(query, [hospital, slot], (err, result) => {
-      if (err) {
-          console.error('Database insertion error:', err);
-          return res.status(500).send({ success: false, message: 'Database error' });
-      }
-
-      console.log('Reservation saved:', result);
-      res.send({ success: true, message: 'Reservation successful' });
-      db_connect.close(conn);
+  const { hospitalName, selectedSlot } = req.body;
+  const sql = 'INSERT INTO reservation (hospital_name, reservation_time) VALUES (?, ?)';
+  const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '1234',
+    database: 'hospital_data'
+  });
+  db.query(sql, [hospitalName, selectedSlot], (err, result) => {
+    if (err) {
+      console.error('Error inserting reservation:', err);
+      return res.status(500).send('Failed to reserve');
+    }
+    res.send('<script>alert("예약 성공!"); window.location.href = "/";</script>');
   });
 });
+
 
 
 // 페이지 방문 시 호출되는 함수
@@ -348,8 +344,8 @@ app.get('/detail/:id', (req, res) => {
 const user = require('./routes/user');
 app.use('/user', user);
 
-const review = require('./routes/review');
-app.use('/review', review);
+const posts = require('./routes/posts');
+app.use('/posts', posts);
 
 // 마이페이지
 app.get('/user', (req, res) => {
