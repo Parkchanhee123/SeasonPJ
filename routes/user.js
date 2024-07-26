@@ -8,20 +8,30 @@ const logined = require('../util/logined');
 router.get('/detail', (req, res) => {
     const id = req.user.id;
     const conn = db_connect.getConnection();
+
+    // 사용자 정보 조회
     conn.query(db_sql.cust_select_one, [id], (err, result, fields) => {
-        try {
-            if (err) {
-                console.log('select Error');
-                throw err;
-            } else {
-                userinfo = result[0];
-                logined.go(req, res, { 'center': 'user/detail', 'userinfo': userinfo });
-            }
-        } catch (err) {
-            console.log(err);
-        } finally {
+        if (err) {
+            console.error('Select Error:', err);
+            res.status(500).send('Server Error: Failed to retrieve user information');
             db_connect.close(conn);
+            return;
         }
+
+        const userinfo = result[0];
+
+        // 사용자의 예약 정보 조회
+        conn.query(db_sql.reserv_select_by_user, [id], (err, reservations, fields) => {
+            if (err) {
+                console.error('Select Error:', err);
+                res.status(500).send('Server Error: Failed to retrieve reservation information');
+                db_connect.close(conn);
+                return;
+            }
+
+            logined.go(req, res, { 'center': 'user/detail', 'userinfo': userinfo, 'reservations': reservations });
+            db_connect.close(conn);
+        });
     });
 });
 
@@ -33,19 +43,20 @@ router.post("/updateimpl", (req, res) => {
     console.log(id + ' ' + pwd + ' ' + name + ' ' + acc);
     let values = [pwd, name, acc, id];
 
-    conn = db_connect.getConnection();
+    const conn = db_connect.getConnection();
 
     conn.query(db_sql.cust_update, values, (e, result, fields) => {
         try {
             if (e) {
-                console.log('Insert Error');
+                console.error('Insert Error:', e);
                 throw e;
             } else {
                 console.log('Insert OK !');
                 res.redirect('/user/detail');            //기존에 서버에 만들어뒀던걸 리다이렉트
             }
         } catch (err) {
-            console.log(err);
+            console.error('Error:', err);
+            res.status(500).send('Server Error: Failed to update user information');
         } finally {
             db_connect.close(conn);
         }

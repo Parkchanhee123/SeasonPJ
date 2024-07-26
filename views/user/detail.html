@@ -36,10 +36,21 @@
             <h2>병원 예약 정보</h2>
             <table>
                 <thead>
-                    <tr>예약한 병원</tr>
-                    <tr>날짜</tr>
-                    <tr>시간</tr>
+                    <tr>
+                        <th>예약한 병원</th>
+                        <th>날짜</th>
+                        <th>시간</th>
+                    </tr>
                 </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.hospital_name }}</td>
+                        <td>{{ reservation.reservation_time }}</td>
+                        <td>{{ reservation.reservation_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </div>

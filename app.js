@@ -153,7 +153,7 @@ app.get('/book', ensureAuthenticated, (req, res) => {
 // 예약 db
 app.post('/reserve', (req, res) => {
   const { hospitalName, selectedSlot } = req.body;
-  const sql = 'INSERT INTO reservation (hospital_name, reservation_time) VALUES (?, ?)';
+  const sql = 'INSERT INTO reservation (hospital_name, reservation_time, user_id) VALUES (?, ?, ?)';
   const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
