@@ -22,4 +22,5 @@ module.exports = {
 
     reserv_select_one: 'SELECT * FROM reservation WHERE id = ?',
     reserv_select_by_user: 'SELECT * FROM reservation WHERE user_id = ?'
+    
 };

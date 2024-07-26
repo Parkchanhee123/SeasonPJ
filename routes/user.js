@@ -35,6 +35,28 @@ router.get('/detail', (req, res) => {
     });
 });
 
+router.post("/searchimpl", (req, res) => {
+    let user_id = req.body.user_id; // 사용자가 입력한 예약자명
+
+    const conn = db_connect.getConnection();
+    conn.query(db_sql.reserv_select_by_user, [user_id], (err, reservations, fields) => {
+        try {
+            if (err) {
+                console.error('Search Error:', err);
+                throw err;
+            } else {
+                console.log('Search OK!');
+                logined.go(req, res, { 'center': 'user/detail', 'reservations': reservations });
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server Error: Failed to search reservation information');
+        } finally {
+            db_connect.close(conn);
+        }
+    });
+});
+
 router.post("/updateimpl", (req, res) => {
     let id = req.body.id;        //post 방식일때는 body에서 가져옴
     let pwd = req.body.pwd;

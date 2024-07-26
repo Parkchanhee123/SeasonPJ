@@ -1,81 +1,32 @@
-<form id="detailpage" action="/posts" method="post">
-    <div class="pinfo text-center">.</div>
-    <!-- 제목 입력 필드 -->
-    <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-pencil"></i></span>
+<div class="text_container" style="margin-top:30px; width:50%; margin:0 auto;">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>병원 후기 상세</h2>
+            <div class="form-group">
+                <label for="userid" style="margin-top: 50px;">닉네임</label>
+                <input type="text" class="form-control" id="userid" name="userid" value="{{ custinfo.user_id }}"
+                    readonly>
             </div>
-            <input name="title" id="title" value="{{detailinfo.title}}" placeholder="제목" class="form-control" type="text" required>
+
+            <div class="form-group">
+                <label for="hos" >병원 이름</label>
+                <input type="text" class="form-control" id="hos" name="hos" value="{{ custinfo.hospital_name }}"
+                    readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="title" >제목</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ custinfo.title }}"
+                    readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="comm">후기</label>
+                <textarea class="form-control" id="comm" name="comm" rows="3" readonly>{{ custinfo.comment }}</textarea>
+            </div>
+            <a href="/review">
+                <button type="submit" class="btn btn-primary" style="margin-bottom: 10px;">목록으로</button>
+            </a>
         </div>
     </div>
-
-    <div class="pinfo text-center"></div>
-
-    <!-- 이름 입력 필드 -->
-    <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-user"></i></span>
-            </div>
-            <input name="name" id="name" value="{{detailinfo.name}}" placeholder="이름" class="form-control" type="text" required>
-        </div>
-    </div>
-
-    <!-- 방문일자 입력 필드 -->
-    <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-            </div>
-            <input name="visit_date" id="visit_date" value="{{detailinfo.visit_date}}" type="text" class="form-control" placeholder="방문일자" required>
-        </div>
-    </div>
-
-    <!-- 병원이름 입력 필드 -->
-    <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-hospital"></i></span>
-            </div>
-            <input name="hospital_name" id="hospital_name" value="{{detailinfo.hospital_name}}" class="form-control" required>
-                
-                {% for hospital in hospitals %}
-                    <option value="{{ hospital.yadmNm }}">{{ hospital.yadmNm }}</option>
-                {% endfor %}
-            
-        </div>
-    </div>
-
-    <!-- 평점 선택 필드 -->
-    <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-heart"></i></span>
-            </div>
-            <input class="form-control" id="rate" value="{{detailinfo.rate}}" name="rate" required>
-            
-            
-        </div>
-    </div>
-
-    <div class="pinfo text-center">.</div>
-
-    <!-- 리뷰 내용 입력 필드 -->
-    <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-pencil"></i></span>
-            </div>
-            <textarea class="form-control" placeholder="리뷰를 작성해주세요." id="review" name="review" rows="3" required>{{detailinfo.review}}</textarea>
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary btn-block">확인</button>
-</form>
 </div>
-
-<!-- 스크립트 -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

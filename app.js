@@ -128,6 +128,7 @@ app.get('/register', (req, res) => {
 
 // 병원 예약 페이지
 app.get('/book', ensureAuthenticated, (req, res) => {
+  let id = req.query.id;
   let name = req.query.name;
   name = '%' + name + '%'; 
   console.log("검색어:", name); 
@@ -152,7 +153,7 @@ app.get('/book', ensureAuthenticated, (req, res) => {
 
 // 예약 db
 app.post('/reserve', (req, res) => {
-  const { hospitalName, selectedSlot } = req.body;
+  const { hospitalName, selectedSlot, user_id } = req.body;
   const sql = 'INSERT INTO reservation (hospital_name, reservation_time, user_id) VALUES (?, ?, ?)';
   const db = mysql.createConnection({
     host: 'localhost',
@@ -160,7 +161,7 @@ app.post('/reserve', (req, res) => {
     password: '1234',
     database: 'hospital_data'
   });
-  db.query(sql, [hospitalName, selectedSlot], (err, result) => {
+  db.query(sql, [hospitalName, selectedSlot, user_id], (err, result) => {
     if (err) {
       console.error('Error inserting reservation:', err);
       return res.status(500).send('Failed to reserve');
@@ -168,6 +169,8 @@ app.post('/reserve', (req, res) => {
     res.send('<script>alert("예약 성공!"); window.location.href = "/";</script>');
   });
 });
+
+
 
 
 
@@ -344,8 +347,8 @@ app.get('/detail/:id', (req, res) => {
 const user = require('./routes/user');
 app.use('/user', user);
 
-const posts = require('./routes/posts');
-app.use('/posts', posts);
+const review = require('./routes/review');
+app.use('/review', review);
 
 // 마이페이지
 app.get('/user', (req, res) => {
